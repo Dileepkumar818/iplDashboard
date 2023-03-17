@@ -68,50 +68,38 @@ class TeamMatches extends Component {
     this.setState({latestMatchesList: extractData, isLoading: false})
   }
 
-  renderTeamMatches = () => {
-    const {latestMatchesList} = this.state
-    const {teamBannerUrl, latestMatchDetails} = latestMatchesList
-    return (
-      <div className="team-matches-container">
-        <img src={teamBannerUrl} alt="img" className="team-banner" />
-        <LatestMatch latestMatch={latestMatchDetails} />
-        {this.renderRecentMatchesList()}
-      </div>
-    )
-  }
-
-  renderRecentMatchesList = () => {
-    const {latestMatchesList} = this.state
-    const {recentMatches} = latestMatchesList
-    return (
-      <ul className="recent-matches-list">
-        {recentMatches.map(eachMatch => (
-          <MatchCard matchData={eachMatch} key={eachMatch.id} />
-        ))}
-      </ul>
-    )
-  }
-
-  renderLoader = () => (
-    <div className="loader-container">
-      <Loader
-        type="BallTriangle"
-        color="#00BFFF"
-        height={80}
-        width={80}
-        data-testid="loader"
-      />
-    </div>
-  )
-
   render() {
-    const {isLoading} = this.state
+    const {isLoading, latestMatchesList} = this.state
     const {match} = this.props
     const {params} = match
     const {id} = params
+    const {teamBannerUrl, latestMatchDetails, recentMatches} = latestMatchesList
     return (
       <div className={`app-team-matches-container ${id}`}>
-        {isLoading ? this.renderLoader() : this.renderTeamMatches()}
+        {isLoading ? (
+          <div>
+            <Loader
+              type="ballTriangle"
+              color="#ffffff"
+              width={80}
+              height={80}
+            />
+          </div>
+        ) : (
+          <div className="team-matches-container">
+            <img
+              src={teamBannerUrl}
+              alt="team banner"
+              className="team-banner"
+            />
+            <LatestMatch latestMatch={latestMatchDetails} />
+            <ul className="recent-matches-list">
+              {recentMatches.map(eachMatch => (
+                <MatchCard matchData={eachMatch} key={eachMatch.id} />
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     )
   }
